@@ -1,2 +1,4 @@
 serverenv.env
-.env
+*.env
+
+__pycache__/
