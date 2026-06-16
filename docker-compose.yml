@@ -1,0 +1,15 @@
+services:
+  minimusic:
+    image: ghcr.io/minimusic-app/minimusic:latest
+    container_name: minimusic
+    ports:
+      - "8000:8000"
+    volumes:
+      - /musics:/music
+      - /config:/config
+
+    environment:
+      - SERVER_PORT=8000
+
+    restart:
+      - unless-stopped

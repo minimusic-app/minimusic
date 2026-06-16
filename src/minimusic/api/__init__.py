@@ -1,0 +1,1 @@
+"""MiniMusic API package."""
