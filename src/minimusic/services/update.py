@@ -15,18 +15,18 @@ from PyQt6.QtWidgets import (
     QLabel, QPushButton, QProgressBar, QWidget, QGraphicsOpacityEffect
 )
 
-# ── Configurações ──────────────────────────────────────────────────────────────
+
 
 CURRENT_VERSION = "0.0.1"
 GITHUB_REPO     = "minimusic-app/minimusic"
 RELEASES_URL    = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
 
-# ── Worker: roda em background ─────────────────────────────────
+
 
 class UpdateChecker(QThread):
     """Verifica a versão remota sem bloquear a thread principal."""
-    update_available = pyqtSignal(str, str, str)  # tag, url_download, notas
+    update_available = pyqtSignal(str, str, str)  
     no_update        = pyqtSignal()
     check_failed     = pyqtSignal(str)
 
@@ -54,7 +54,7 @@ class UpdateChecker(QThread):
 
 
 class UpdateDownloader(QThread):
-    """Faz o download + extração reportando progresso."""
+    
     progress  = pyqtSignal(int)    # 0-100
     finished  = pyqtSignal()
     failed    = pyqtSignal(str)
@@ -81,7 +81,7 @@ class UpdateDownloader(QThread):
                     if total:
                         self.progress.emit(int(done / total * 90))
 
-            # Extrai ao lado do executável
+           
             app_dir = os.path.dirname(sys.executable)
             with zipfile.ZipFile(zip_path, "r") as zf:
                 zf.extractall(app_dir)
@@ -94,7 +94,7 @@ class UpdateDownloader(QThread):
             self.failed.emit(str(e))
 
 
-# ── Diálogo principal ──────────────────────────────────────────────────────────
+
 
 class UpdateDialog(QDialog):
     DARK_BG     = "#111114"
@@ -122,7 +122,7 @@ class UpdateDialog(QDialog):
         self._apply_styles()
         self._fade_in()
 
-    # ── Construção da UI ───────────────────────────────────────────────────────
+    
 
     def _build_ui(self):
         root = QVBoxLayout(self)
@@ -134,7 +134,7 @@ class UpdateDialog(QDialog):
         card_layout.setContentsMargins(28, 28, 28, 24)
         card_layout.setSpacing(0)
 
-        # — Cabeçalho ─────────────────────────────────────────────────────────
+        
         header = QHBoxLayout()
 
         badge = QLabel("NOVO")
@@ -159,13 +159,13 @@ class UpdateDialog(QDialog):
         card_layout.addWidget(self.title_lbl)
         card_layout.addSpacing(4)
 
-        # Versão atual
+        
         cur = QLabel(f"Você tem a {CURRENT_VERSION}")
         cur.setObjectName("subtitle")
         card_layout.addWidget(cur)
         card_layout.addSpacing(16)
 
-        # — Notas de versão ───────────────────────────────────────────────────
+        
         notes_label = QLabel(self.notes)
         notes_label.setObjectName("notes")
         notes_label.setWordWrap(True)
@@ -173,7 +173,7 @@ class UpdateDialog(QDialog):
         card_layout.addWidget(notes_label)
         card_layout.addSpacing(24)
 
-        # — Barra de progresso (oculta no início) ─────────────────────────────
+        
         self.progress_bar = QProgressBar()
         self.progress_bar.setObjectName("progress")
         self.progress_bar.setRange(0, 100)
@@ -191,7 +191,7 @@ class UpdateDialog(QDialog):
         card_layout.addWidget(self.progress_bar)
         card_layout.addSpacing(8)
 
-        # — Botões ─────────────────────────────────────────────────────────────
+        
         btn_row = QHBoxLayout()
         btn_row.setSpacing(10)
 
@@ -209,8 +209,7 @@ class UpdateDialog(QDialog):
 
         root.addWidget(self.card)
 
-    # ── Estilos ────────────────────────────────────────────────────────────────
-
+   
     def _apply_styles(self):
         self.setStyleSheet(f"""
             QDialog {{ background: transparent; }}
@@ -293,7 +292,7 @@ class UpdateDialog(QDialog):
             }}
         """)
 
-    # ── Animação de entrada ────────────────────────────────────────────────────
+   
 
     def _fade_in(self):
         effect = QGraphicsOpacityEffect(self)
@@ -305,7 +304,7 @@ class UpdateDialog(QDialog):
         anim.setEasingCurve(QEasingCurve.Type.OutCubic)
         anim.start(QPropertyAnimation.DeletionPolicy.DeleteWhenStopped)
 
-    # ── Download ───────────────────────────────────────────────────────────────
+   
 
     def _start_download(self):
         self.update_btn.setEnabled(False)
@@ -348,7 +347,7 @@ class UpdateDialog(QDialog):
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
 
-# ── Função pública — chame no MainWindow ───────────────────────────────────────
+
 
 def check_for_updates_async(parent=None):
     """
