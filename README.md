@@ -2,7 +2,7 @@
 
 Mini Music is a fast, beautiful and good, self-hosted music streaming server. Like [Swing Music](https://swingmx.com) or [Spotify](https://spotify.com/), but bring your own music in your machine.
 
-> [!NOTE]
+> [!IMPORTANT]
 > Mini Music is in development. The first version(0.0.1 or 0.0.2) can have some bugs, to help us, open a issue or make a Pull Request(PR).
 
 ## Features
