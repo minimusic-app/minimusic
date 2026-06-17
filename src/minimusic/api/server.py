@@ -37,6 +37,19 @@ async def post_login(data: LoginRequest):
     
     return user
 
+@app.post("/register")
+async def post_register():
+    user = register_user()
+
+    if not user or not generate_password_hash(user):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="No Password or Username."
+    )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_100_CONTINUE
+        )
 
 def runServer():
     uvicorn.run(app, port=PORT, host="0.0.0.0")
