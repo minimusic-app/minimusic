@@ -16,5 +16,11 @@ def register_user(username, password, role='user'):
         "INSERT INTO users (username, hash_password, role) VALUES (?, ?, ?)",
         (username, hash_password, role)
     )
+    
+def user_exists() -> bool:
+    """True if at least one account exists (used to decide login vs onboarding)."""
+        
+    count = cur.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+    return count > 0
 
-    conn.commit() # Save
+conn.commit() # Save
