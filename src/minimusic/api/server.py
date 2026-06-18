@@ -6,8 +6,8 @@ FastAPI is too good to create a "mini server", to run, we use uvicorn.
 """
 
 from fastapi import FastAPI, HTTPException, status
-from minimusic.config.serverenv import PORT
-from minimusic.db.login import get_user_from_db
+from config.serverenv import PORT
+from db.login import get_user_from_db
 from werkzeug.security import check_password_hash
 from pydantic import BaseModel
 import uvicorn
