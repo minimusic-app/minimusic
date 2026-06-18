@@ -2,14 +2,22 @@ import os
 import sys
 import time
 from rich.console import Console
+from config.serverenv import PORT
+import urllib.request
+import subprocess
+import webview
+import threading
+import time
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
-from minimusic.api.server import runServer
+from api.server import runServer
 
 console = Console()
+
+SERVER_URL = "http://localhost:8000/"
 
 def main():
     console.print("[bold green]Starting MiniMusic...[/bold green]")
@@ -19,6 +27,38 @@ def main():
     print(f"Server running on http://localhost:{PORT}")
     runServer()  # Start the server API
 
+    server_thread = threading.Thread(target=runServer, daemon=True)
+    server_thread.start()
+
+    _wait_for_server(SERVER_URL)
+
+    webview.create_window(
+        "Mini Music",
+        SERVER_URL,
+        width=1100,
+        height=700,
+        min_size=(900, 600),
+    )
+
+    webview.start()
+
+def _wait_for_server(url: str, timeout: float = 10.0):
+    """Polls /health until the server responds or timeout is reached."""
+    deadline = time.time() + timeout
+    last_error = None
+ 
+    while time.time() < deadline:
+        try:
+            urllib.request.urlopen(f"{url}/health", timeout=1)
+            return
+        except (urllib.error.URLError, ConnectionError) as e:
+            last_error = e
+            time.sleep(0.2)
+ 
+    raise RuntimeError(
+        f"MiniMusic server did not respond at {url} within {timeout}s. "
+        f"Last error: {last_error}"
+    )
 
 if __name__ == "__main__":
     main()
