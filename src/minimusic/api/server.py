@@ -18,7 +18,9 @@ class LoginRequest(BaseModel):
     username: str
     password: str
 
-app.get("/")
+# FIX: Added the missing '@' symbol to properly register the route decorator.
+# Without the '@', FastAPI ignores this function, resulting in a 404 "Not Found" error.
+@app.get("/")
 async def root():
     return {"status": "Online"}
 
@@ -53,7 +55,6 @@ async def post_register():
 
 def runServer():
     uvicorn.run(app, port=PORT, host="0.0.0.0")
-
 
 if __name__ == "__main__":
     runServer()
