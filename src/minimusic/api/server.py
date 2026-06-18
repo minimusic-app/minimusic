@@ -20,7 +20,7 @@ class LoginRequest(BaseModel):
 
 app.get("/")
 async def root():
-    return {"status": "Online", "running": "local"}
+    return {"status": "Online"}
 
 def login_minimusic(username, password):
     payload = {"username": username, "password": password}
