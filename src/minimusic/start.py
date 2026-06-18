@@ -16,6 +16,7 @@ def main():
     time.sleep(3)
     console.print("[bold yellow]Starting MiniMusic Server...[/bold yellow]")
     time.sleep(2)
+    print(f"Server running on http://localhost:{PORT}")
     runServer()  # Start the server API
 
 
