@@ -23,7 +23,8 @@ def main():
     time.sleep(3)
     console.print("[bold yellow]Starting MiniMusic Server...[/bold yellow]")
     time.sleep(2)
-    print(f"Server running on http://localhost:{PORT}")  
+    console.print(f"http://127.0.0.1:{PORT}")
+    console.print(f"http://localhost:{PORT}")  
 
     server_thread = threading.Thread(target=runServer, daemon=True)
     server_thread.start()
