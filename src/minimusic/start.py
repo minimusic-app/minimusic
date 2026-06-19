@@ -4,7 +4,6 @@ import time
 from rich.console import Console
 from config.serverenv import PORT
 import urllib.request
-import subprocess
 import webview
 import threading
 import time
@@ -17,15 +16,14 @@ from api.server import runServer
 
 console = Console()
 
-SERVER_URL = "http://localhost:8000/"
+SERVER_URL = f"http://localhost:{PORT}"
 
 def main():
     console.print("[bold green]Starting MiniMusic...[/bold green]")
     time.sleep(3)
     console.print("[bold yellow]Starting MiniMusic Server...[/bold yellow]")
     time.sleep(2)
-    print(f"Server running on http://localhost:{PORT}")
-    runServer()  # Start the server API
+    print(f"Server running on http://localhost:{PORT}")  
 
     server_thread = threading.Thread(target=runServer, daemon=True)
     server_thread.start()
@@ -39,7 +37,7 @@ def main():
         height=700,
         min_size=(900, 600),
     )
-
+    console.print("Calling webview.start()...")
     webview.start()
 
 def _wait_for_server(url: str, timeout: float = 10.0):
