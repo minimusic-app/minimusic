@@ -39,7 +39,8 @@ def main():
         min_size=(900, 600),
     )
     console.print("Calling webview.start()...")
-    webview.start()
+    logo = os.path.join(os.path.dirname(__file__), "assets", "minimusic_logo.ico")
+    webview.start(icon=logo)
 
 def _wait_for_server(url: str, timeout: float = 10.0):
     """Polls /health until the server responds or timeout is reached."""
