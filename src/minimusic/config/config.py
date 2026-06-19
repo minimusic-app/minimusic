@@ -5,7 +5,7 @@ import json
 
 
 @dataclass
-class UserConfig:
+class Config:
     finished: bool = field(default=False, init=True)
     cfgPathName: str = "userconfig.json"
     cfgPath: Path = Path('.')
@@ -13,6 +13,11 @@ class UserConfig:
 
     serverId: str = ""
     usersConnected: bool = True
+
+    showAlbumsAsSingles: bool = False
+    cleanAlbumTitle: bool = True
+
+    showPlaylistsAsFolder: bool = False
 
     def load_config(self) -> Optional[Any]:
         """Load the user config from the file named by `cfgPathName`.
