@@ -10,6 +10,7 @@ from pathlib import Path as FilePath
  
 from fastapi import FastAPI, HTTPException, Path, status
 from fastapi.responses import HTMLResponse
+from file_scanner import get_music_path, scan_user_folders
  
 try:
     from minimusic.config.serverenv import PORT
@@ -93,12 +94,12 @@ async def root():
     </body>
     </html>
     """
-
-
+ 
+ 
 @app.get("/health")
 async def health():
     return {"status": "online"}
-
+ 
 
 @app.get("login", response_class=HTMLResponse)
 async def login_page():
@@ -276,6 +277,7 @@ async def post_register(data: RegisterRequest):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username and password are required.",
         )
+    
  
     if len(data.password) < 6:
         raise HTTPException(
@@ -294,7 +296,9 @@ async def post_register(data: RegisterRequest):
  
     return {"user_id": user.id, "username": user.username}
  
- 
+@app.get("/onboarding")
+async def onboarding():
+    return {"message": "test"} 
 
  
 @app.get("/api/musics_get")
@@ -305,10 +309,19 @@ async def api_musics_get(music: str = ""):
             detail="No music path found! Select a folder for your music.",
         )
  
-    # TODO: look up the actual indexed songs for this folder/user
-    return {"path": music}
- 
- 
+    get_music_path(Path)
+
+@app.get("/api/scan_user_folders")
+async def scan_user_folders_get():
+    folders = Path()
+    scan_user_folders()
+
+    if not folders:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Can't scan user folders."
+        )
+
 def runServer():
     uvicorn.run(app, port=PORT, host="0.0.0.0")
  
