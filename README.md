@@ -8,7 +8,7 @@ Mini Music is a fast, beautiful and good, self-hosted music streaming server. Li
 ## Features
 
 - **Cross-Plataform(Linux, Windows, Mac, Android and iPhone)**
-- **Beautiful UI using PyQt6 and some PyQt6 Widgets**
+- **Beautiful UI using HTML and CSS**
 - **Multi-user support**
 - **Local Server using FastAPI**
 
