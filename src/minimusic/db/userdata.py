@@ -55,3 +55,9 @@ class UserData:
     def is_admin(cls, username):
         
         return cls.get_user_role(username) == "admin"
+
+    @classmethod
+    def get_by_username(cls, username: str):
+        res = cur.execute("SELECT" + cls, "WHERE" + cls.id == id)
+
+        return res
