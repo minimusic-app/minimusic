@@ -3,3 +3,4 @@ uvicorn
 rich
 werkzeug
 pywebview
+jwt
