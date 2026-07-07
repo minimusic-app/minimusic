@@ -3,10 +3,9 @@ import sys
 import time
 from rich.console import Console
 from config.serverenv import PORT
-import urllib.request
-import webview
 import threading
-import time
+import socket
+import mimetypes
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if ROOT not in sys.path:
@@ -16,49 +15,53 @@ from api.server import runServer
 
 console = Console()
 
-SERVER_URL = f"http://localhost:{PORT}"
+def mimetypes_start():
 
-def main():
-    console.print("[bold green]Starting MiniMusic...[/bold green]")
-    time.sleep(3)
-    console.print("[bold yellow]Starting MiniMusic Server...[/bold yellow]")
-    time.sleep(2)
-    console.print(f"http://127.0.0.1:{PORT}")
-    console.print(f"http://localhost:{PORT}")  
+    console.log("[bold green] Starting Mimetypes... [/bold green]")
+    mimetypes.add_type("text/css", ".css")
+    mimetypes.add_type("text/javascript", ".js")
+    mimetypes.add_type("text/html", ".html")
+    mimetypes.add_type("image/png", ".png")
+    mimetypes.add_type("image/webp", ".webp")
 
-    server_thread = threading.Thread(target=runServer, daemon=True)
-    server_thread.start()
+class Starter:
+    def __init__(self, port: PORT) -> None:
+        self.port = port or int(PORT)
+        self.ip = f"http://127.0.0.1:{self.port}"
 
-    _wait_for_server(SERVER_URL)
-
-    webview.create_window(
-        "Mini Music",
-        SERVER_URL,
-        width=1100,
-        height=700,
-        min_size=(900, 600),
-    )
-    console.print("Calling webview.start()...")
-    logo = os.path.join(os.path.dirname(__file__), "assets", "minimusic_logo.ico")
-    webview.start(icon=logo)
-
-def _wait_for_server(url: str, timeout: float = 10.0):
-    """Polls /health until the server responds or timeout is reached."""
-    deadline = time.time() + timeout
-    last_error = None
- 
-    while time.time() < deadline:
+    
+    def get_local_ip(self) -> str:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
-            urllib.request.urlopen(f"{url}/health", timeout=1)
-            return
-        except (urllib.error.URLError, ConnectionError) as e:
-            last_error = e
-            time.sleep(0.2)
- 
-    raise RuntimeError(
-        f"MiniMusic server did not respond at {url} within {timeout}s. "
-        f"Last error: {last_error}"
-    )
+            s.connect(("8.8.8.8", 80))
+            ip = s.getsockname()[0]
+        except Exception:
+            ip = "127.0.0.1"
+        finally:
+            s.close()
+        return ip
 
-if __name__ == "__main__":
-    main()
+    def start_server_as_thread(self):
+        thread = threading.Thread(target=runServer, daemon=True)
+        thread.start()
+        console.log("[bold green] Server started! [/bold green]")
+        console.log("\n")
+        console.log(f"[bold] Local: http://127.0.0.1:{self.port} [/bold]")
+        console.log(f"[bold] Network: http://{self.get_local_ip()}:{self.port}")
+        
+    
+def start_minimusic():
+    # First, start mimetypes
+    mimetypes_start()
+    starter = Starter(port=int(PORT))
+    starter.start_server_as_thread()
+    
+
+if __name__=="__main__":
+    start_minimusic()
+
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        console.log("[red] Closing Server... [/red]")
