@@ -51,7 +51,11 @@ class Starter:
         
     
 def start_minimusic():
-    # First, start mimetypes
+    from builder import build_minimusic
+
+    if not getattr(sys, "frozen", False):
+        build_minimusic()
+    
     mimetypes_start()
     starter = Starter(port=int(PORT))
     starter.start_server_as_thread()
