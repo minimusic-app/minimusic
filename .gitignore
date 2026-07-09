@@ -2,3 +2,6 @@ serverenv.env
 *.env
 
 __pycache__/
+
+build/
+dist/
