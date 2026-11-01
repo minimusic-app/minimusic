@@ -10,7 +10,7 @@ from pathlib import Path as FilePath
  
 from fastapi import FastAPI, HTTPException, Path, status
 from fastapi.responses import HTMLResponse
-from file_scanner import get_music_path, scan_user_folders
+from api.file_scanner import get_music_path, scan_user_folders
  
 try:
     from minimusic.config.serverenv import PORT
