@@ -1,11 +1,14 @@
 import os
 import sys
 import time
-from rich.console import Console
 from config.serverenv import PORT
+from utils.logging import Logger, Colors
 import threading
 import socket
 import mimetypes
+
+logger = Logger()
+color = Colors()
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if ROOT not in sys.path:
@@ -13,11 +16,10 @@ if ROOT not in sys.path:
 
 from api.server import runServer
 
-console = Console()
 
 def mimetypes_start():
 
-    console.log("[bold green] Starting Mimetypes... [/bold green]")
+    logger.print("[bold green] Starting Mimetypes... [/bold green]")
     mimetypes.add_type("text/css", ".css")
     mimetypes.add_type("text/javascript", ".js")
     mimetypes.add_type("text/html", ".html")
@@ -44,10 +46,10 @@ class Starter:
     def start_server_as_thread(self):
         thread = threading.Thread(target=runServer, daemon=True)
         thread.start()
-        console.log("[bold green] Server started! [/bold green]")
-        console.log("\n")
-        console.log(f"[bold] Local: http://127.0.0.1:{self.port} [/bold]")
-        console.log(f"[bold] Network: http://{self.get_local_ip()}:{self.port}")
+        logger.print("Server started!")
+        logger.print("\n")
+        logger.print(f"Local: http://127.0.0.1:{self.port}")
+        logger.print(f"Network: http://{self.get_local_ip()}:{self.port}")
         
     
 def start_minimusic():
@@ -68,4 +70,4 @@ if __name__=="__main__":
         while True:
             pass
     except KeyboardInterrupt:
-        console.log("[red] Closing Server... [/red]")
+        logger.print("Closing Server...")
