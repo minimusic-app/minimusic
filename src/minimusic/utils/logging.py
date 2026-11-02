@@ -27,6 +27,7 @@ color = Colors()
 class Formatter(logging.Formatter):
     format_ = "[%(asctime)s] [%(levelname)s] %(message)s (%(filename)s:%(lineno)d)"
 
+    # Credits: github.com/swingmx/swingmusic, src/swingmusic/logger.py
     FORMATS = {
         logging.DEBUG: color.grey + format_ + color.reset,
         logging.INFO: color.grey + format_ + color.reset,
