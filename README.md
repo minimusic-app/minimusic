@@ -37,7 +37,7 @@ services:
     restart: unless-stopped
 ```
 
-You can set a new port for the local server. Just change the ports in the docker-compose.yml, set `SERVER_PORT` to your desired port(ex: `1970:1970` with `SERVER_PORT=1970`).
+You can set a new port for the local server. Just change the ports in the docker-compose.yml, set `SERVER_PORT` to your desired port(ex: `1900` with `SERVER_PORT=1900`).
 
 ### Using Docker CLI
 
