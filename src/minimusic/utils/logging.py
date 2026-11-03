@@ -27,7 +27,6 @@ color = Colors()
 class Formatter(logging.Formatter):
     format_ = "[%(asctime)s] [%(levelname)s] %(message)s (%(filename)s:%(lineno)d)"
 
-    # Credits: github.com/swingmx/swingmusic, src/swingmusic/logger.py
     FORMATS = {
         logging.DEBUG: color.grey + format_ + color.reset,
         logging.INFO: color.grey + format_ + color.reset,
@@ -53,17 +52,11 @@ class Formatter(logging.Formatter):
 
 class Logger:
     # class of the logger, use: logger = Logger()
-    def print(
-        tags: str,
-        message: str,
-        extra: bool = False,
-        stack_info: bool = False,
-        stack_level: int = 1,
-        *args: object
-    ):
-        print(tags + "" + message + "" + hour.now() + color.grey, *args)
+    def print(self, tags: str, message: str) -> None:
+        print(f"[{tags}] {message}")
 
     def warning(
+            self,
             tags: str,
             message: str,
             extra: bool = False,
@@ -71,9 +64,10 @@ class Logger:
             stack_level: int = 1,
             *args: object
     ):
-        print(tags + "" + message + "" + hour.now() + color.yellow, *args)
+        print(tags, message, hour.now(), color.yellow, *args)
 
     def error(
+            self,
             tags: str,
             message: str,
             extra: bool = False,
@@ -81,9 +75,10 @@ class Logger:
             stack_level: int = 1,
             *args: object
     ):
-        print(tags + "" + message + "" + hour.now() + color.red, *args)
+        print(tags, message, hour.now(), color.red, *args)
 
     def critical(
+                self,
                 tags: str,
                 message: str,
                 extra: bool = False,
@@ -91,9 +86,10 @@ class Logger:
                 stack_level: int = 1,
                 *args: object
         ):
-            print(tags + "" + message + "" + hour.now() + color.bold_redred, *args)
+            print(tags + "" + message + "" + hour.now() + color.bold_red, *args)
 
     def error(
+                self,
                 tags: str,
                 message: str,
                 extra: bool = False,
@@ -101,4 +97,4 @@ class Logger:
                 stack_level: int = 1,
                 *args: object
         ):
-            print(tags + "" + message + "" + hour.now() + color.grey, *args)
+            print(tags, message, hour.now(), color.grey, *args)
